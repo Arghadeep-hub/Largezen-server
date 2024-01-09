@@ -50,9 +50,23 @@ const updateLeadById = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const deleteLeadById = expressAsyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+
+  validateUserId(id);
+  try {
+    await Lead.findByIdAndDelete(id);
+    return res.status(202).json({ id, message: "Deleted successfully" });
+  } catch (error) {
+    throw new Error(error, { cause: 400 });
+  }
+});
+
 module.exports = {
   allLeads,
   addLead,
   getLeadById,
   updateLeadById,
+  deleteLeadById,
 };
