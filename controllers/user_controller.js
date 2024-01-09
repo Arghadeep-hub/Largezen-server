@@ -68,10 +68,23 @@ const updateUserById = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const deleteUserById = expressAsyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  validateUserId(id);
+  try {
+    await User.findByIdAndDelete(id);
+    return res.status(202).json({ id, message: "Deleted successfully" });
+  } catch (error) {
+    throw new Error(error, { cause: 400 });
+  }
+});
+
 module.exports = {
   allUser,
   addUserSignup,
   userSignin,
   getUserById,
   updateUserById,
+  deleteUserById,
 };
