@@ -52,7 +52,6 @@ const updateLeadById = expressAsyncHandler(async (req, res) => {
 
 const deleteLeadById = expressAsyncHandler(async (req, res) => {
   const id = req.params.id;
-  const body = req.body;
 
   validateUserId(id);
   try {
