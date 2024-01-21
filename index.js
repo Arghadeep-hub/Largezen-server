@@ -18,6 +18,9 @@ app.use(cors());
 app.use(logReqRes("log.txt")); // Generating Logs
 
 // Routes
+app.get("/", (req, res) => {
+  res.status(200).send("Hi! This is from Larzegen Server");
+});
 app.use("/user", user_router);
 app.use("/lead", lead_router);
 
