@@ -10,7 +10,8 @@ const {
 const userMiddleware = require("../middlewares/verify_user");
 
 router.route("/").get(allUser);
-router.route("/auth").get(userSignin).post(addUserSignup);
+router.route("/login").post(userSignin)
+router.route("/signup").post(addUserSignup);
 
 router
   .route("/:id")
