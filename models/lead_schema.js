@@ -31,6 +31,10 @@ const leadSchema = new mongoose.Schema(
       type: Number,
       require: true,
     },
+    meeting_date: {
+      type: String,
+      require: true,
+    },
   },
   { timestamps: true }
 );
