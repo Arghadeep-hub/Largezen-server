@@ -24,7 +24,7 @@ const getLeadByUserId = expressAsyncHandler(async (req, res) => {
   validateUserId(id);
 
   try {
-    const lead = await Lead.find({ user_id: id }, '_id name phone address requirement lead_status meeting_status createdAt').exec();
+    const lead = await Lead.find({ user_id: id }, '_id name phone address requirement lead_status meeting_status meeting_date').exec();
     return res.status(200).json(lead);
   } catch (error) {
     throw new Error(error, { cause: 400 });
