@@ -3,7 +3,7 @@ const userMiddleware = require("../middlewares/verify_user");
 const {
   allLeads,
   addLead,
-  getLeadById,
+  getLeadByUserId,
   updateLeadById,
   deleteLeadById,
 } = require("../controllers/lead_controller");
@@ -11,7 +11,7 @@ const {
 router.route("/").get(userMiddleware, allLeads).post(userMiddleware, addLead);
 router
   .route("/:id")
-  .get(userMiddleware, getLeadById)
+  .get(userMiddleware, getLeadByUserId)
   .patch(userMiddleware, updateLeadById)
   .delete(userMiddleware, deleteLeadById);
 
