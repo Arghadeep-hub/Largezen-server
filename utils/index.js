@@ -8,7 +8,10 @@ const validateUserId = (id) => {
 
 const sendToken = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
-  return res.status(statusCode).json({ token });
+  const id = user.id;
+  const role = user.role;
+  const name = `${user.first_name} ${user.last_name}`;
+  return res.status(statusCode).json({ id, name, role, token });
 };
 
 module.exports = { validateUserId, sendToken };

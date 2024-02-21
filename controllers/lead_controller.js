@@ -19,16 +19,12 @@ const addLead = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const getLeadById = expressAsyncHandler(async (req, res) => {
+const getLeadByUserId = expressAsyncHandler(async (req, res) => {
   const id = req.params.id;
   validateUserId(id);
 
   try {
-    const lead = await Lead.findById(id, {
-      createdAt: 0,
-      updatedAt: 0,
-      __v: 0,
-    });
+    const lead = await Lead.find({ user_id: id }, '_id name phone address requirement lead_status meeting_status meeting_date').exec();
     return res.status(200).json(lead);
   } catch (error) {
     throw new Error(error, { cause: 400 });
@@ -65,7 +61,7 @@ const deleteLeadById = expressAsyncHandler(async (req, res) => {
 module.exports = {
   allLeads,
   addLead,
-  getLeadById,
+  getLeadByUserId,
   updateLeadById,
   deleteLeadById,
 };

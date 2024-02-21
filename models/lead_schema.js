@@ -11,7 +11,7 @@ const leadSchema = new mongoose.Schema(
       require: true,
     },
     phone: {
-      type: Number,
+      type: String,
       unique: true,
       require: true,
     },
@@ -29,6 +29,10 @@ const leadSchema = new mongoose.Schema(
     },
     meeting_status: {
       type: Number,
+      require: true,
+    },
+    meeting_date: {
+      type: String,
       require: true,
     },
   },
