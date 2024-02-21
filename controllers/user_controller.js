@@ -64,7 +64,7 @@ const updateUserById = expressAsyncHandler(async (req, res) => {
       .status(200)
       .json({ id, ...body, message: "updated Successfully" });
   } catch (error) {
-    throw new Error("Runtime Error Occure", { cause: 400 });
+    throw new Error(error, { cause: 400 });
   }
 });
 
