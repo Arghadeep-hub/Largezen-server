@@ -11,12 +11,34 @@ const addUserSignup = expressAsyncHandler(async (req, res) => {
   const body = req.body;
 
   // Check if use Exist
-  const userExists = await User.findOne({ email: body.email });
-  if (userExists) throw new Error("User already exists", { cause: 400 });
+  const email = await User.findOne({ email: body.email });
+  const phone = await User.findOne({ phone: body.phone });
+  if (email)
+    throw new Error("User email address already exists", { cause: 400 });
+  if (phone)
+    throw new Error("User phone number already exists", { cause: 400 });
 
   try {
-    const user = await User.create({ ...body });
-    sendToken(user, 201, res);
+    if (body.role !== 1 && !body?.referral)
+      throw new Error("Give your admin Referral");
+
+    if (body.role === 1) {
+      const user = await User.create({ ...body }); // user creation
+      sendToken(user, 201, res);
+    } else {
+      const user = await User.findOne({ referral: body.referral }); // find user by referral code
+
+      const createUser = await User.create({
+        ...body,
+        subUser: user._id,
+      }); // create new user
+
+      await User.findByIdAndUpdate(user._id, {
+        subUser: user.subUser.concat(createUser.id),
+      }); // updating sub user id
+
+      sendToken(createUser, 201, res);
+    }
   } catch (error) {
     throw new Error(error);
   }
@@ -68,13 +90,39 @@ const updateUserById = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// Deleting as per user role 
 const deleteUserById = expressAsyncHandler(async (req, res) => {
   const id = req.params.id;
 
   validateUserId(id);
   try {
-    await User.findByIdAndDelete(id);
-    return res.status(202).json({ id, message: "Deleted successfully" });
+    const user = await User.findById(id);
+    if (user.role === 1) {
+      const subUserIds = user.subUser; // Assuming user.subUser is an array of ObjectIDs
+
+      // Delete all sub users
+      await User.deleteMany({ _id: { $in: subUserIds } });
+    
+      // Delete the admin user
+      await User.findByIdAndDelete(id);
+    }
+
+    if (user.role === 2) {
+      const parentId = user.subUser[0];
+
+      await User.findOneAndUpdate(
+        { _id: parentId }, // Query to find the document
+        { $pull: { subUser: id } }, // Operation to pull the userIdToRemove from subUser array
+        { new: true } //  To return modified document
+      );
+
+      await User.findByIdAndDelete(id); //  Delete User from the collection
+    }
+    return res.status(202).json({
+      first_name: user.first_name,
+      last_name: user.last_name,
+      message: "Deleted successfully",
+    });
   } catch (error) {
     throw new Error(error, { cause: 400 });
   }

@@ -29,5 +29,5 @@ app.use(notFound);
 app.use(errorHandler);
 
 app.listen(process.env.PORT || 5000, () =>
-  console.log(`Started on http://localhost:${process.env.PORT}`)
+  console.log(`Started on PORT: ${process.env.PORT}`)
 );

@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const leadSchema = new mongoose.Schema(
   {
     user_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       require: true,
     },
     name: {
@@ -25,10 +26,12 @@ const leadSchema = new mongoose.Schema(
     },
     lead_status: {
       type: Number,
+      default: 0,
       require: true,
     },
     meeting_status: {
       type: Number,
+      default: 0,
       require: true,
     },
     meeting_date: {

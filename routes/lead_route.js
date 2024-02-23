@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const userMiddleware = require("../middlewares/verify_user");
+const adminMiddleware = require("../middlewares/verify_admin");
 const {
   allLeads,
   addLead,
@@ -8,7 +9,7 @@ const {
   deleteLeadById,
 } = require("../controllers/lead_controller");
 
-router.route("/").get(userMiddleware, allLeads).post(userMiddleware, addLead);
+router.route("/").get(adminMiddleware, allLeads).post(userMiddleware, addLead);
 router
   .route("/:id")
   .get(userMiddleware, getLeadByUserId)

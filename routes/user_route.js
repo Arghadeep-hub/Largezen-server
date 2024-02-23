@@ -8,9 +8,10 @@ const {
   deleteUserById,
 } = require("../controllers/user_controller");
 const userMiddleware = require("../middlewares/verify_user");
+const adminMiddleware = require("../middlewares/verify_admin");
 
-router.route("/").get(allUser);
-router.route("/login").post(userSignin)
+router.route("/").get(adminMiddleware, allUser);
+router.route("/login").post(userSignin);
 router.route("/signup").post(addUserSignup);
 
 router

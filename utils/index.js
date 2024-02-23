@@ -1,9 +1,10 @@
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 
 const validateUserId = (id) => {
   const isValid = mongoose.Types.ObjectId.isValid(id);
   if (!isValid) throw new Error("The id is not valid or found");
-  return true
+  return true;
 };
 
 const sendToken = (user, statusCode, res) => {
@@ -14,4 +15,17 @@ const sendToken = (user, statusCode, res) => {
   return res.status(statusCode).json({ id, name, role, token });
 };
 
-module.exports = { validateUserId, sendToken };
+function referralCodeGen(length) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = crypto.randomFillSync(Buffer.alloc(length));
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    result += chars[bytes[i] % chars.length];
+  }
+
+  return result;
+}
+
+module.exports = { validateUserId, sendToken, referralCodeGen };
