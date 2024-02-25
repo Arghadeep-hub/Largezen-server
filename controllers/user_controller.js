@@ -3,8 +3,12 @@ const expressAsyncHandler = require("express-async-handler");
 const { sendToken, validateUserId } = require("../utils");
 
 const allUser = expressAsyncHandler(async (req, res) => {
-  const user = await User.find({}).select("-password").exec();
-  return res.status(200).json(Object.values(user));
+  try {
+    const user = await User.find({}).select("-password").exec();
+    return res.status(200).json(Object.values(user));
+  } catch (error) {
+    throw new Error(error, { cause: 400 });
+  }
 });
 
 const addUserSignup = expressAsyncHandler(async (req, res) => {
@@ -90,7 +94,7 @@ const updateUserById = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Deleting as per user role 
+// Deleting as per user role
 const deleteUserById = expressAsyncHandler(async (req, res) => {
   const id = req.params.id;
 
@@ -102,7 +106,7 @@ const deleteUserById = expressAsyncHandler(async (req, res) => {
 
       // Delete all sub users
       await User.deleteMany({ _id: { $in: subUserIds } });
-    
+
       // Delete the admin user
       await User.findByIdAndDelete(id);
     }

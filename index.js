@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const user_router = require("./routes/user_route");
 const lead_router = require("./routes/lead_route");
+const task_router = require("./routes/task_route");
+
 const { logReqRes } = require("./middlewares");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
@@ -23,6 +25,7 @@ app.get("/", (req, res) => {
 });
 app.use("/user", user_router);
 app.use("/lead", lead_router);
+app.use("/task", task_router);
 
 // Error Handler
 app.use(notFound);

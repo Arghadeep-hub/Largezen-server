@@ -35,7 +35,7 @@ const leadSchema = new mongoose.Schema(
       require: true,
     },
     meeting_date: {
-      type: String,
+      type: Date,
       require: true,
     },
   },
