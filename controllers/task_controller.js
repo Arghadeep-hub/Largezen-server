@@ -55,8 +55,7 @@ const addTask = expressAsyncHandler(async (req, res) => {
 const getTaskById = expressAsyncHandler(async (req, res) => {
   const id = req.params.id;
 
-  const isValid = mongoose.Types.ObjectId.isValid(id);
-  if (!isValid) throw new Error("Task is not found");
+  validateUserId(id);
 
   try {
     const task = await Task.findById(id);
@@ -66,10 +65,36 @@ const getTaskById = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const updteTaskByUserId = expressAsyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  validateUserId(id);
+  try {
+    await Task.findByIdAndUpdate(id, body);
+    return res
+      .status(200)
+      .json({ id, ...body, message: "Task updated succefully" });
+  } catch (error) {
+    throw new Error(error, { cause: 400 });
+  }
+});
 
+const deleteTaskByUserId = expressAsyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  validateUserId(id);
+
+  try {
+    return res.status(202).json({ id, message: "Deleted successfully" });
+  } catch (error) {
+    throw new Error(error, { cause: 400 });
+  }
+});
 
 module.exports = {
   getAllTask,
   addTask,
   getTaskById,
+  updteTaskByUserId,
+  deleteTaskByUserId,
 };

@@ -2,21 +2,6 @@ const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema(
   {
-    admin: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      require: true,
-    },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      require: true,
-    },
-    assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      require: true,
-    },
     title: {
       type: String,
       require: true,
@@ -35,6 +20,21 @@ const taskSchema = new mongoose.Schema(
       enum: [1, 2], // Pending, Done
       default: 1,
       required: true,
+    },
+    admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      require: true,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      require: true,
+    },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      require: true,
     },
   },
   { timestamps: true }
